@@ -1,4 +1,3 @@
-
 module "public_eks_cluster" {
     
   source         = "github.com/rui-armada/terraform-modules/aws-eks"
@@ -10,8 +9,14 @@ module "public_eks_cluster" {
   instance_types = ["t3.medium"]
 }
 
-module "lb-nginx" {
+module "helm-release" {
 
-  source     = "github.com/rui-armada/terraform-modules/helm-lb"
-  cluster_id = module.public_eks_cluster.id
+  source     = "github.com/rui-armada/terraform-modules/helm-release"
+  namespace = "steeleye"
+  helmchart = "./helm"
+  values = "./values.yaml"
+  name = "helm"
+
+  //depends_on = [module.metallb]
+  
 }
